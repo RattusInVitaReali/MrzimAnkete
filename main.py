@@ -1,20 +1,28 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
-from webdriver_manager.chrome import ChromeDriverManager
 import time
 import random
 import sys
 
-browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+browser = webdriver.Chrome()
+
+USERNAME = ""
+PASSWORD = ""
 
 try:
     browser.get('https://student.etf.bg.ac.rs/security/login.jsf')
     browser.maximize_window()
 
-    browser.find_element(By.NAME, "j_username").send_keys(sys.argv[1])
-    browser.find_element(By.NAME, "j_password").send_keys(sys.argv[2])
+    username = sys.argv[1]
+    password = sys.argv[2]
+    if USERNAME != "":
+        username = USERNAME
+    if PASSWORD != "":
+        password = PASSWORD
+
+    browser.find_element(By.NAME, "j_username").send_keys(username)
+    browser.find_element(By.NAME, "j_password").send_keys(password)
     browser.find_element(By.NAME, "login").click()
 
     time.sleep(.2)
@@ -39,12 +47,11 @@ while (True):
         random.shuffle(radio_buttons)
         for button in radio_buttons:
             button.click()
-        browser.find_element(By.ID, "main:grupaPitanja:0:pitanje:5:uirepeat:0:tekstKorisnika2").send_keys("Izmedju " + str(random.randint(1, 5)) + " i " + str(random.randint(6, 15)))
         browser.find_element(By.ID, "main:finish").click()
 
-        time.sleep(.2)
+        time.sleep(1)
         browser.find_element(By.ID, "main:save").click()
     except:
         break
-browser.close()
+browser.quit()
 print("Gotovo")
